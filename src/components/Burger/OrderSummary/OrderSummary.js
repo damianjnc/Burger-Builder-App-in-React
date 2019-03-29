@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Auxiliary from '../../../hoc/Auxiliary/Auxiliary';
 import Button from '../../UI/Button/Button';
+import { Link } from 'react-router-dom';
 
 class OrderSummary extends Component{
 
@@ -35,10 +36,10 @@ class OrderSummary extends Component{
                     clicked={this.props.purchaseCancelled}
                 >CANCEL</Button>
 
-                <Button
+                <Link to="/checkout"><Button
                     btnType="Success"
                     clicked={this.props.purchaseContinued}
-                >CONTINUE</Button>
+                >CONTINUE</Button></Link>
 
             </Auxiliary>
         );
