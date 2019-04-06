@@ -63,9 +63,14 @@ class ContactData extends Component {
     orderHandler = (event) => {
         event.preventDefault();
         this.setState({ loading: true });
+        const formData = {};
+        for(let formElementIdentifier in this.state.orderForm){
+            formData[formElementIdentifier] = this.state.orderForm[formElementIdentifier].value;
+        }
         const order = {
             ingredients: this.props.ingredients,
-            price: this.props.price
+            price: this.props.price,
+            orderData: formData
         };
 
         axios.post('/orders.json', order)
@@ -74,6 +79,19 @@ class ContactData extends Component {
                 this.props.history.push('/');
             })
             .catch(error => this.setState({ loading:false}));
+    }
+
+    inputChangeHandler = (event, inputIdentifier) => {
+        const updatedOrderForm = {
+            ...this.state.orderForm
+        };
+        const updatedFormElement = {
+            ...updatedOrderForm[inputIdentifier]
+        };
+        updatedFormElement.value  = event.target.value;
+        updatedOrderForm[inputIdentifier]= updatedFormElement;
+        this.setState({orderForm: updatedOrderForm });
+
     }
 
     render() {
@@ -86,13 +104,15 @@ class ContactData extends Component {
         }
         console.log(formElementArray);
         let form = (
-            <form>
+            <form onSubmit={this.orderHandler}>
                 {formElementArray.map(formElement =>
                     <Input
                         key={formElement.id}
                         elementType={formElement.config.elementType}
                         elementConfig={formElement.config.elementConfig}
-                        value={formElement.config.value}/>
+                        value={formElement.config.value}
+                        changed={(event) => this.inputChangeHandler(event, formElement.id)}
+                    />
                 )}
                 <Button btnType="Success" clicked={this.orderHandler}>ORDER</Button>
             </form>
