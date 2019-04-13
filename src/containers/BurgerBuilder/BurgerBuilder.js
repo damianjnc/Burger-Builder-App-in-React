@@ -27,7 +27,8 @@ class BurgerBuilder extends Component {
     }
 
     componentDidMount(){
-        axios.get('https://my-burger-app-in-react.firebaseio.com/ingredients.json')
+        console.log(this.props);
+    /*     axios.get('https://my-burger-app-in-react.firebaseio.com/ingredients.json')
             .then(response => {
                 this.setState({ ingredients: response.data });
             })
@@ -35,7 +36,7 @@ class BurgerBuilder extends Component {
                 this.setState({ error: true });
             });
     }
-
+ */
     updatePurchaseState(ingredients){
         const sum = Object.keys(ingredients)
             .map(igKey => {
