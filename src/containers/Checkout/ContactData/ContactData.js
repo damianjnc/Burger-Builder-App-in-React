@@ -86,7 +86,7 @@ class ContactData extends Component {
                     options:[{value: 'fastest', displayValue: 'Fastest'},
                         {value: 'cheapest', displayValue:'Cheapest'}]
                 },
-                value: '',
+                value: 'fastest',
                 validation:{},
                 valid: true
             }
@@ -106,7 +106,7 @@ class ContactData extends Component {
             orderData: formData
         };
 
-        this.props.order.onOrderBurger(order);
+        this.props.onOrderBurger(order);
     }
 
     checkValidity(value, rules){
@@ -203,7 +203,7 @@ const mapStateToProps = state => {
 
 
 
-const mapDispatchToProps = dispatch=> {
+const mapDispatchToProps = dispatch => {
     return{
         onOrderBurger:  orderData => dispatch(actions.purchaseBurger(orderData))
     }
