@@ -6,7 +6,7 @@ import classes from './ContactData.css';
 import axios from '../../../axios-orders';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
-import withErrorHandler from '../../../hoc/withErrorHandler';
+import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../../store/actions';
 
 class ContactData extends Component {
@@ -48,7 +48,7 @@ class ContactData extends Component {
                 validation: {
                     required: true,
                     minLength: 5,
-                    maxLength: 5
+                    maxLength: 7
                 },
                 valid: false,
                 touched: false
@@ -74,7 +74,8 @@ class ContactData extends Component {
                 },
                 value: '',
                 validation: {
-                    required: true
+                    required: true,
+                    isEmail: true
                 },
                 valid: false,
                 touched: false
@@ -90,8 +91,7 @@ class ContactData extends Component {
                 valid: true
             }
         },
-        formIsValid:false,
-        loading:false
+        formIsValid:false 
     }
 
     orderHandler = (event) => {
@@ -106,7 +106,7 @@ class ContactData extends Component {
             orderData: formData
         };
 
-        this.props.onOrderBurger(order);
+        this.props.order.onOrderBurger(order);
     }
 
     checkValidity(value, rules){
@@ -124,6 +124,10 @@ class ContactData extends Component {
         }
         if(rules.maxLength){
             isValid = value.length <= rules.maxLength && isValid;
+        }
+        if (rules.isEmail) {
+            const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+            isValid = pattern.test(value) && isValid
         }
         return isValid;
     }
@@ -176,7 +180,7 @@ class ContactData extends Component {
                 <Button btnType="Success" disabled={!this.state.formIsValid} clicked={this.orderHandler}>ORDER</Button>
             </form>
         );
-        if(this.state.loading){
+        if(this.props.loading){
             form = <Spinner/>;
         }
         return (
@@ -190,15 +194,18 @@ class ContactData extends Component {
 
 const mapStateToProps = state => {
     return {
-        ings: state.ingredients,
-        price: state.totalPrice
+        ings: state.burgerBuilder.ingredients,
+        price: state.burgerBuilder.totalPrice, 
+        loading: state.order.loading
     }
 }
 
 
+
+
 const mapDispatchToProps = dispatch=> {
     return{
-        onOrderBurger:  (orderData) => dispatch(actions.purchaseBurgerStart(orderData))
+        onOrderBurger:  orderData => dispatch(actions.purchaseBurger(orderData))
     }
 };
-export default connect(mapStateToProps)(withErrorHandler(ContactData, axios));
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(ContactData, axios));
