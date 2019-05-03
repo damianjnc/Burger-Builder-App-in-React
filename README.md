@@ -1,4 +1,4 @@
-BurgerBuilder available at:
+BurgerBuilder available at: https://my-burger-app-in-react.firebaseapp.com/
 
 ## Available Scripts
 
